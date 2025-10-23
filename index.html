@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ecom Experts — Single Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#0ea5e9; --muted:#94a3b8; --glass: rgba(255,255,255,0.04);
+      --whatsapp:#25D366;
+      --max-width:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071029 0%, #071226 60%); color:#e6eef8; -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale; padding:32px; display:flex; justify-content:center;
+    }
+    .container{width:100%; max-width:var(--max-width);}
+
+    /* Header / Hero */
+    header{display:grid; grid-template-columns: 1fr 420px; gap:28px; align-items:center; margin-bottom:28px}
+    .brand{display:flex; flex-direction:column; gap:12px}
+    .logo{display:flex; align-items:center; gap:12px}
+    .logo .mark{width:56px; height:56px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg,#0ea5e9 0%, #7c3aed 100%); font-weight:800}
+    h1{margin:0; font-size:28px}
+    p.lead{margin:0; color:var(--muted)}
+
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:16px; padding:18px; box-shadow: 0 6px 24px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03)}
+    .hero-visual{width:100%; height:320px; border-radius:12px; overflow:hidden; position:relative; background:linear-gradient(135deg,#07203a,#0f2740); display:flex; align-items:center; justify-content:center}
+    .hero-visual img{max-width:100%; height:100%; object-fit:cover; opacity:0.98}
+    .hero-visual .overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(2,6,23,0.0), rgba(2,6,23,0.5));}
+
+    /* Services */
+    .services{display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top:20px}
+    .card{background:var(--card); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 6px 18px rgba(2,6,23,0.6); transition:transform .32s ease, box-shadow .32s ease}
+    .card:hover{transform:translateY(-8px); box-shadow: 0 18px 40px rgba(2,6,23,0.7)}
+    .service-row{display:flex; gap:12px; align-items:center}
+    .icon-wrap{width:56px; height:56px; display:grid; place-items:center; background:var(--glass); border-radius:12px}
+    .service-title{font-weight:700; font-size:16px}
+    .price{margin-left:auto; font-weight:800; background:linear-gradient(90deg,#06b6d4,#7c3aed); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .desc{color:var(--muted); margin-top:8px; font-size:13px}
+    .card-footer{display:flex; gap:10px; margin-top:12px; align-items:center}
+
+    .btn{padding:10px 14px; border-radius:10px; display:inline-flex; gap:8px; align-items:center; cursor:pointer; font-weight:700; border:none}
+    .btn-primary{background:linear-gradient(90deg,#06b6d4,#7c3aed); color:#04263a}
+    .btn-ghost{background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted)}
+
+    /* Drawer */
+    .drawer{position:fixed; right:0; top:0; height:100vh; width:420px; transform:translateX(110%); background:linear-gradient(180deg,#071a2a,#041024); box-shadow:-24px 0 80px rgba(0,0,0,0.6); border-left:1px solid rgba(255,255,255,0.03); transition:transform .36s cubic-bezier(.2,.9,.2,1); z-index:80; display:flex; flex-direction:column}
+    .drawer.open{transform:translateX(0)}
+    .drawer .head{padding:20px; display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(255,255,255,0.02)}
+    .drawer .body{padding:18px; overflow:auto; flex:1}
+    .drawer .close{margin-left:auto; background:transparent; border:none; color:var(--muted); font-weight:700; cursor:pointer}
+
+    /* Testimonials */
+    .testimonials{margin-top:22px; display:flex; gap:12px; align-items:center}
+    .t-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:14px; border-radius:10px; min-width:220px}
+    .t-card p{margin:6px 0 0 0; color:var(--muted); font-size:13px}
+
+    /* Footer */
+    footer{margin-top:26px; display:flex; justify-content:space-between; align-items:center; color:var(--muted)}
+
+    /* WhatsApp floating */
+    .wa-fab{position:fixed; right:22px; bottom:22px; width:62px; height:62px; border-radius:50%; background:var(--whatsapp); display:grid; place-items:center; box-shadow:0 12px 40px rgba(2,6,23,0.6); z-index:90}
+    .wa-fab a{display:block; width:100%; height:100%;}
+
+    /* Responsive */
+    @media (max-width:980px){
+      header{grid-template-columns:1fr;}
+      .services{grid-template-columns:repeat(2,1fr)}
+      .hero-visual{height:220px}
+      .drawer{width:100%;}
+    }
+    @media (max-width:600px){
+      .services{grid-template-columns:1fr}
+      .logo .mark{width:46px;height:46px}
+      h1{font-size:22px}
+    }
+
+    /* subtle animations */
+    .fade-in{animation:fadeIn .6s ease both}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">
+          <div class="mark">EE</div>
+          <div>
+            <h1>Ecom Experts</h1>
+            <p class="lead">Your Partner in E‑Commerce Success — Facebook Ads • Shopify • Marketplace Management</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:12px">
+          <button class="btn btn-primary" onclick="openDrawer('all')">Get Started</button>
+          <button class="btn btn-ghost" onclick="document.querySelector('#services').scrollIntoView({behavior:'smooth'})">Our Services</button>
+        </div>
+
+        <div class="testimonials fade-in">
+          <div class="t-card">
+            <strong>Rohit K.</strong>
+            <p>"+85% ROAS in 45 days — Shopify store sales doubled."</p>
+          </div>
+          <div class="t-card">
+            <strong>Priya S.</strong>
+            <p>"Meesho listing optimization saved me hours every week."</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-visual">
+          <!-- Replace src with your preferred agency photo -->
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=0d4a0c9d22b5e5d4df2c9f67e1f3a4a2" alt="Agency visual">
+          <div class="overlay"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px">
+          <div style="display:flex; gap:12px; align-items:center">
+            <div style="width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,#06b6d4,#7c3aed); display:grid; place-items:center; font-weight:800; color:#04263a">🔥</div>
+            <div>
+              <div style="font-weight:800">Limited Offer: Only 10 Slots</div>
+              <div style="font-size:13px; color:var(--muted)">Book before <strong>20 Nov 2025</strong></div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-primary" onclick="openDrawer('all')">Contact on WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Services grid -->
+    <section id="services" class="services">
+
+      <!-- Card template start -->
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Facebook SVG -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 12C22 6.477 17.523 2 12 2S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.99H7.898v-2.888h2.54V9.797c0-2.507 1.492-3.89 3.777-3.89 1.094 0 2.238.196 2.238.196v2.46h-1.26c-1.242 0-1.63.772-1.63 1.562v1.875h2.773l-.443 2.888h-2.33v6.99C18.343 21.128 22 16.991 22 12z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Facebook Ads</div>
+            <div class="desc">Expert ad setup, creative & audience targeting to scale ROI.</div>
+          </div>
+          <div class="price">₹3,499</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Facebook Ads', 3499)">
+            View Details
+          </button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Facebook Ads')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Shopify / web -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M2 6.5A2.5 2.5 0 014.5 4h2A2.5 2.5 0 019 6.5V8H6v2H4v3h2v6H4.5A2.5 2.5 0 012 19.5v-13z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Shopify Web Development</div>
+            <div class="desc">Custom store design, theme & app integration, launch-ready store.</div>
+          </div>
+          <div class="price">₹4,999</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Shopify Web Development', 4999)">View Details</button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Shopify Web Development')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Supplier -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .5-4.5 3 1.5 6L12 14l-6 4 1.5-6L3 8.5 9 8 12 2z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Supplier Connect</div>
+            <div class="desc">Verified private suppliers, quality checks & negotiation support.</div>
+          </div>
+          <div class="price">₹2,999</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Supplier Connect', 2999)">View Details</button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Supplier Connect')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Account mgmt -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4.418 0-8 2-8 4.5V22h16v-3.5C20 16 16.418 14 12 14z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Account Management</div>
+            <div class="desc">Daily store operations, orders, listings & performance tracking.</div>
+          </div>
+          <div class="price">₹2,499</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Account Management', 2499)">View Details</button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Account Management')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Meesho -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2l4 4-2 3-4-3-2 3-3-4 7-3z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Meesho Account Handling</div>
+            <div class="desc">Upload, SEO, pricing & performance monitoring for Meesho.</div>
+          </div>
+          <div class="price">₹1,999</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Meesho Account Handling', 1999)">View Details</button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Meesho Account Handling')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+      <div class="card fade-in">
+        <div class="service-row">
+          <div class="icon-wrap">
+            <!-- Marketplace -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 3h18v4H3V3zm2 6h14v10H5V9z" fill="white"/></svg>
+          </div>
+          <div>
+            <div class="service-title">Flipkart & Amazon Handling</div>
+            <div class="desc">Store setup, catalog optimization & advertising across marketplaces.</div>
+          </div>
+          <div class="price">₹3,999</div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" onclick="openDrawer('Flipkart & Amazon Handling', 3999)">View Details</button>
+          <button class="btn btn-ghost" onclick="openWhatsapp('Flipkart & Amazon Handling')">Contact on WhatsApp</button>
+        </div>
+      </div>
+
+    </section>
+
+    <footer>
+      <div>© 2025 Ecom Experts</div>
+      <div style="display:flex; gap:10px; align-items:center">
+        <div style="color:var(--muted); font-size:13px">Let’s grow your online business together</div>
+        <button class="btn btn-primary" onclick="openDrawer('all')">Start a Project</button>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Drawer (single reused) -->
+  <aside class="drawer" id="drawer">
+    <div class="head">
+      <div style="display:flex; flex-direction:column">
+        <div id="drawerTitle" style="font-weight:800">Service</div>
+        <div id="drawerPrice" style="color:var(--muted); font-size:13px">Price</div>
+      </div>
+      <button class="close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="body">
+      <div id="drawerBody">
+        <p style="color:var(--muted)">Detailed description will appear here. This drawer supports rich HTML like lists, images and CTA buttons.</p>
+        <ul>
+          <li>Dedicated manager</li>
+          <li>Weekly performance reports</li>
+          <li>Creative & copy support</li>
+        </ul>
+        <div style="margin-top:14px; display:flex; gap:10px">
+          <button class="btn btn-primary" id="drawerWhatsapp">Contact via WhatsApp</button>
+          <button class="btn btn-ghost" onclick="closeDrawer()">Close</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- WhatsApp floating button -->
+  <div class="wa-fab" title="Contact on WhatsApp">
+    <a href="#" id="waFab" onclick="openWhatsapp('General Inquiry')" aria-label="WhatsApp contact">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M20.52 3.48A11.88 11.88 0 0012 .04 11.9 11.9 0 003.47 3.48 11.96 11.96 0 000 12c0 2.14.57 4.16 1.65 5.96L.5 23l4.22-1.1A11.93 11.93 0 0012 24c6.63 0 12-5.37 12-12 0-3.2-1.24-6.2-3.48-8.52zM12 21.5c-1.26 0-2.5-.34-3.6-.98l-.26-.16-2.5.65.67-2.44-.17-.27A9.5 9.5 0 012.5 12 9.5 9.5 0 0112 2.5 9.5 9.5 0 0121.5 12 9.5 9.5 0 0112 21.5zM17.2 15.2c-.28-.14-1.66-.82-1.92-.92-.26-.1-.45-.14-.64.14-.18.28-.69.92-.85 1.11-.16.18-.32.2-.6.07-.28-.14-1.18-.43-2.24-1.37-.83-.74-1.39-1.66-1.55-1.92-.16-.27-.02-.42.12-.56.12-.12.28-.32.42-.48.14-.16.19-.27.28-.46.09-.18.05-.34-.03-.48-.08-.14-.64-1.54-.88-2.12-.23-.56-.47-.48-.64-.49-.16-.01-.35-.01-.54-.01s-.48.07-.73.34c-.26.27-1 1-1 2.45 0 1.45 1.03 2.86 1.17 3.06.14.2 2.02 3.08 4.9 4.31 2.88 1.23 2.88.82 3.4.77.51-.05 1.66-.67 1.9-1.32.24-.65.24-1.21.17-1.33-.07-.12-.26-.18-.54-.32z"/></svg>
+    </a>
+  </div>
+
+  <script>
+    // Drawer logic
+    const drawer = document.getElementById('drawer');
+    const drawerTitle = document.getElementById('drawerTitle');
+    const drawerPrice = document.getElementById('drawerPrice');
+    const drawerBody = document.getElementById('drawerBody');
+    const drawerWhatsapp = document.getElementById('drawerWhatsapp');
+
+    function openDrawer(title = 'Service', price = ''){
+      drawer.classList.add('open');
+      drawerTitle.textContent = title;
+      drawerPrice.textContent = price ? 'Price: ₹' + price : '';
+
+      // sample content - you can replace with richer HTML per service
+      drawerBody.innerHTML = `
+        <p style="color:var(--muted)">Detailed overview of <strong>${title}</strong>.</p>
+        <p style="color:var(--muted)">What you get:</p>
+        <ul style="color:var(--muted)">
+          <li>Dedicated manager & weekly reports</li>
+          <li>Onboarding checklist & target KPIs</li>
+          <li>Creative direction & A/B testing</li>
+        </ul>
+        <div style="margin-top:14px; display:flex; gap:10px">
+          <button class="btn btn-primary" onclick="openWhatsapp('${encodeURIComponent(title)}')">Contact via WhatsApp</button>
+          <button class="btn btn-ghost" onclick="closeDrawer()">Close</button>
+        </div>
+      `;
+    }
+
+    function closeDrawer(){ drawer.classList.remove('open'); }
+
+    // WhatsApp opener - replace number with your own
+    function openWhatsapp(service){
+      const number = 'YOUR_NUMBER_HERE'; // <-- REPLACE with country code + number e.g. 919812345678
+      const text = encodeURIComponent(`Hello, I'm interested in ${service}. Please share details.`);
+      if(number === 'YOUR_NUMBER_HERE'){
+        alert('Please edit the code and replace YOUR_NUMBER_HERE with your WhatsApp number (e.g. 919812345678) to enable chat links.');
+        return;
+      }
+      const url = `https://wa.me/${number}?text=${text}`;
+      window.open(url, '_blank');
+    }
+
+    // Simple testimonial slider (auto)
+    (function(){
+      const cards = Array.from(document.querySelectorAll('.t-card'));
+      let idx=0;
+      if(cards.length<=1) return;
+      setInterval(()=>{
+        cards.forEach((c,i)=> c.style.transform = `translateY(${(i-idx)*6}px)`);
+        idx = (idx+1) % cards.length;
+      }, 3500);
+    })();
+
+    // Keyboard accessibility: Esc to close
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeDrawer(); });
+  </script>
+</body>
+</html>
